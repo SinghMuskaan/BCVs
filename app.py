@@ -2,7 +2,6 @@ from flask import Flask, render_template, request
 from utilities import amazon_transcribe
 import json
 
-
 app = Flask(__name__)
 
 
@@ -22,8 +21,8 @@ def lawda():
                             max_speakers=2)
     
     print("response done")
-    with open('output.json', 'w') as outfile:
-        json.dump(res, outfile)
+    print("-----------------------------------")
+    print(res)
         
     print("response saved")
 

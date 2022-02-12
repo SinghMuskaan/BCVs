@@ -3,8 +3,8 @@ import pandas as pd
 import time
 
 transcribe = boto3.client('transcribe',
-                          aws_access_key_id = "AKIAUPSWAF3364WL6PR3",
-                          aws_secret_access_key = "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",
+                          aws_access_key_id = "AKIA4QB2WTN52EI4GUHM",
+                          aws_secret_access_key = "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",
                           region_name = "ap-south-1"
 )
 
@@ -35,7 +35,7 @@ def amazon_transcribe(audio_file_name, max_speakers = -1):
   if max_speakers > 10:
     raise ValueError("Maximum detected speakers is 10.")
 
-  job_uri = "https://deepcon.s3.ap-south-1.amazonaws.com/" + audio_file_name 
+  job_uri = "https://deepcon.s3.ap-south-1.amazonaws.com/" + audio_file_name  
   job_name = (audio_file_name.split('.')[0]).replace(" ", "")
   
   # check if name is taken or not
