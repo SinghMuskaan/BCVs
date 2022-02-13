@@ -1,11 +1,18 @@
 import boto3
 import pandas as pd
 import time
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+ACCESS_KEY = os.getenv("aws_access_key_id")
+SECRET_KEY = os.getenv("aws_secret_access_key")
+REGION_NAME = os.getenv("region_name")
 
 transcribe = boto3.client('transcribe',
-                          aws_access_key_id = "AKIA4QB2WTN52EI4GUHM",
-                          aws_secret_access_key = "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",
-                          region_name = "ap-south-1"
+                          aws_access_key_id=ACCESS_KEY,
+                          aws_secret_access_key=SECRET_KEY,
+                          region_name=REGION_NAME
 )
 
 def check_job_name(job_name):
