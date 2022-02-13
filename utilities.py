@@ -69,3 +69,4 @@ def amazon_transcribe(audio_file_name, max_speakers = -1):
   if result['TranscriptionJob']['TranscriptionJobStatus'] == 'COMPLETED':
     data = pd.read_json(result['TranscriptionJob']['Transcript']['TranscriptFileUri'])
   return result
+
