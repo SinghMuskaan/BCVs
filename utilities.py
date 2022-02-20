@@ -5,8 +5,8 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-ACCESS_KEY = os.getenv("aws_access_key_id")
-SECRET_KEY = os.getenv("aws_secret_access_key")
+ACCESS_KEY = os.getenv("ACCESS_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY")
 REGION_NAME = os.getenv("region_name")
 
 transcribe = boto3.client('transcribe',
