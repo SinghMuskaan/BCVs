@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from utilities import amazon_transcribe
 import json
+import asyncio
 
 app = Flask(__name__)
 
@@ -13,7 +14,9 @@ def method_name():
 
 
 @app.route('/getcode', methods=["POST", "GET"])
-def lawda():
+def process_input():
+    
+
     code = request.args.get('process_code')
     print("code received: ", code)
     file_name = f"{code}.mp3"
@@ -26,7 +29,7 @@ def lawda():
         
     print("response saved")
 
-    return 0
+    return 'process complete'
 
 
 if __name__ == '__main__':
