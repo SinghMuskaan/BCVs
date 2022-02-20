@@ -7,7 +7,6 @@ from collections import defaultdict
 
 tqdm.pandas()
 
-
 # utility
 def process_data_dict(data_dict: dict):
   data_df = pd.DataFrame(data_dict)
@@ -89,7 +88,7 @@ def process_single(filename: str, code):
     data_df = process_aws_transcribe_output(filename)
     sentences = generate_normalized_output(data_df)
 
-    output_dir = "output//transcripts"
+    output_dir = "output//processed-transcripts"
     save_location = output_dir + '//' + code + '.txt'
     with open(save_location, 'w') as filehandle:
         for sentence in sentences:
@@ -97,4 +96,4 @@ def process_single(filename: str, code):
 
 
 if __name__ == "__main__":
-    process_single(filename="output//transcripts//asrOutput.json", code="asefasawdac")
+    process_single(filename="output//raw-transcripts//asrOutput.json", code="asefasawdac")
