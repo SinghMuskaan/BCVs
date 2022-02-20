@@ -1,11 +1,10 @@
 from flask import Flask, render_template, request
-from utilities import amazon_transcribe
+from utilities import amazon_transcribe, extract_asrOutput
 import json
 import asyncio
+from Handler import process_single
 
 app = Flask(__name__)
-
-
 
 @app.route('/', methods=["POST", "GET"])
 def method_name():
@@ -23,6 +22,15 @@ def process_input():
     res = amazon_transcribe(audio_file_name= file_name,
                             max_speakers=2)
     
+    url = res['TranscriptionJob']['Transcript']['TranscriptFileUri']
+    # save file locally 
+    path_to_raw_transcript = "output//raw-transcripts"
+    extract_asrOutput(url, path_to_raw_transcript, code)
+
+    # process asrOutput 
+    path_to_file = f"{path_to_raw_transcript}//{code}.json"
+    process_single(path_to_file, code)
+
     print("response done")
     print("-----------------------------------")
     print(res)

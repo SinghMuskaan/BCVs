@@ -1,6 +1,8 @@
 import boto3
 import pandas as pd
 import time
+import urllib
+import json
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -77,3 +79,10 @@ def amazon_transcribe(audio_file_name, max_speakers = -1):
     data = pd.read_json(result['TranscriptionJob']['Transcript']['TranscriptFileUri'])
   return result
 
+# save asrOutput file locally
+def extract_asrOutput(asr_url, path_to_raw_transcript: str, code):
+  response = urllib.request.urlopen(asr_url)
+  data = json.loads(response.read())
+  path_to_file = f"{path_to_raw_transcript}//{code}.json"
+  with open(path_to_file, "w") as fp:
+    json.dump(data, fp)
