@@ -23,6 +23,8 @@ def process_input():
                             max_speakers=2)
     
     url = res['TranscriptionJob']['Transcript']['TranscriptFileUri']
+    print("----------------------------------------------")
+    print(url)
     # save file locally 
     path_to_raw_transcript = "output//raw-transcripts"
     extract_asrOutput(url, path_to_raw_transcript, code)
