@@ -29,7 +29,7 @@ def process_input():
     print("Receiver name: ", receiver_name)
     file_name = f"{code}.mp3"
     res = amazon_transcribe(audio_file_name= file_name,
-                            max_speakers=2)
+                            max_speakers=5)
     
     url = res['TranscriptionJob']['Transcript']['TranscriptFileUri']
     print("----------------------------------------------")
@@ -46,8 +46,8 @@ def process_input():
         
     print("response saved")
     
-
-    generate_complete_file(f"output//processed-transcripts/{code}.txt")
+    
+    generate_complete_file(f"output//processed-transcripts/{code}.txt", code)
     print(f"final document processed for {code}")
     
     

@@ -319,7 +319,7 @@ def prepare_document(attendee_str, body, annotator = 'DeepCON'):
   Document = f'{Date_}\n{attendee_str}\n\n\n{body}\n\nMinuted by: {annotator}'
   return Document
 
-def generate_complete_file(path_to_file: str):
+def generate_complete_file(path_to_file: str, process_code: str):
     # sample processing for single transcript
     # path_to_file = "output//processed-transcripts//asefasawdac.txt"
     trans_dict = process_single(path_to_file)
@@ -344,5 +344,4 @@ def generate_complete_file(path_to_file: str):
     DOCUMENT = prepare_document(attendees, main_body_)
     print(DOCUMENT)
     # TODO Change this later
-    process_code = "asefasawdac"
     convert_str_2_txt(DOCUMENT, process_code)
