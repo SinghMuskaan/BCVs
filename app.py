@@ -3,6 +3,7 @@ from utilities import amazon_transcribe, extract_asrOutput
 import json
 from meeting_summarization import generate_complete_file
 from mailing_module import send_email
+from database_handler import update_values
 
 # import asyncio
 from Handler import process_single
@@ -57,7 +58,8 @@ def process_input():
             sender= sender
         )
         
-       
+    update_values(process_code= code,
+                  processing_status= True)
         
     return 'process complete'
 
