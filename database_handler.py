@@ -40,7 +40,7 @@ def update_values(process_code: str, processing_status):
     s3_upload(file_path, process_code=process_code)  
     myquery = { "process_code": process_code }
     newvalues = { "$set": {"processing_status": processing_status,
-                           "processed_minutes_link": f's3://deepcon/processed/{process_code}.txt'} }
+                           "processed_minutes_link": f'https://deepcon-processed-minutes.s3.ap-south-1.amazonaws.com/processed_{process_code}'} }
     res = collection.update_one(myquery, newvalues)
           
 

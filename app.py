@@ -29,7 +29,7 @@ def process_input():
     print("Receiver name: ", receiver_name)
     file_name = f"{code}.mp3"
     res = amazon_transcribe(audio_file_name= file_name,
-                            max_speakers=5)
+                            max_speakers=6)
     
     url = res['TranscriptionJob']['Transcript']['TranscriptFileUri']
     print("----------------------------------------------")

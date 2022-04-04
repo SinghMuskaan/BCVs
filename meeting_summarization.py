@@ -236,7 +236,7 @@ def generate_dialogues(roles, utterances):
   return dialogues
 
 # partition document for better processing.
-def doc_partitioning(document, max_characters=1700):
+def doc_partitioning(document, max_characters=500):
   processed_dict = dict()
   processed_dict['part_0'] = ''
   identity_generator = 'part_'
@@ -329,7 +329,7 @@ def generate_complete_file(path_to_file: str, process_code: str):
     meeting_conv = generate_dialogues(trans_dict["roles"], trans_dict["utterances"])
 
     # pratitioned document
-    processed_dict = doc_partitioning(meeting_conv, max_characters=2000)
+    processed_dict = doc_partitioning(meeting_conv, max_characters=500)
 
     # apply summarizer to processed transcript
     output = apply_summarizer(processed_dict)
@@ -345,3 +345,7 @@ def generate_complete_file(path_to_file: str, process_code: str):
     print(DOCUMENT)
     # TODO Change this later
     convert_str_2_txt(DOCUMENT, process_code)
+    
+if __name__ == '__main__':
+  generate_complete_file(f"output//processed-transcripts/e8lLJ3Y9U1Fr8sHy.txt", 'e8lLJ3Y9U1Fr8sHy')
+  
