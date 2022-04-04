@@ -4,6 +4,7 @@ import json
 from meeting_summarization import generate_complete_file
 from mailing_module import send_email
 from database_handler import update_values
+from isometric_translation import generate_translated_document
 
 # import asyncio
 from Handler import process_single
@@ -50,6 +51,9 @@ def process_input():
     generate_complete_file(f"output//processed-transcripts/{code}.txt", code)
     print(f"final document processed for {code}")
     
+    generate_translated_document(process_code=code)
+    print(f'generated french minutes for {code}')
+    
     
     email_res = send_email(
             process_code= code,
@@ -59,7 +63,10 @@ def process_input():
         )
         
     update_values(process_code= code,
-                  processing_status= True)
+                  processing_status= True,
+                  translated_status= True)
+    
+    
         
     return 'process complete'
 

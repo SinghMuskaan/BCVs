@@ -345,7 +345,4 @@ def generate_complete_file(path_to_file: str, process_code: str):
     print(DOCUMENT)
     # TODO Change this later
     convert_str_2_txt(DOCUMENT, process_code)
-    
-if __name__ == '__main__':
-  generate_complete_file(f"output//processed-transcripts/e8lLJ3Y9U1Fr8sHy.txt", 'e8lLJ3Y9U1Fr8sHy')
   

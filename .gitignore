@@ -1,3 +1,7 @@
 major_server/
 .env
-output
+output/meeting-minutes/*
+output/processed-transcripts/*
+output/meeting-minutes-french/*
+output/raw-transcripts/*
+!output/.gitkeep
