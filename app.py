@@ -2,7 +2,9 @@ from flask import Flask, render_template, request
 from utilities import amazon_transcribe, extract_asrOutput
 import json
 from meeting_summarization import generate_complete_file
-import asyncio
+from mailing_module import send_email
+
+# import asyncio
 from Handler import process_single
 
 app = Flask(__name__)
@@ -18,14 +20,18 @@ def process_input():
     
 
     code = request.args.get('process_code')
+    receiver_email = request.args.get('receiver_email')
+    receiver_name = request.args.get('receiver_name')
+    sender = "deepconteam@gmail.com"
     print("code received: ", code)
+    print("Receiver email: ", receiver_email)
+    print("Receiver name: ", receiver_name)
     file_name = f"{code}.mp3"
     res = amazon_transcribe(audio_file_name= file_name,
                             max_speakers=2)
     
     url = res['TranscriptionJob']['Transcript']['TranscriptFileUri']
     print("----------------------------------------------")
-    print(url)
     # save file locally 
     path_to_raw_transcript = "output//raw-transcripts"
     extract_asrOutput(url, path_to_raw_transcript, code)
@@ -36,14 +42,23 @@ def process_input():
 
     print("response done")
     print("-----------------------------------")
-    print(res)
         
     print("response saved")
     
-    print(f'generating final document for {code}')
+
     generate_complete_file(f"output//processed-transcripts/{code}.txt")
     print(f"final document processed for {code}")
-
+    
+    
+    email_res = send_email(
+            process_code= code,
+            receivers_name= receiver_name,
+            receiver_email= receiver_email,
+            sender= sender
+        )
+        
+       
+        
     return 'process complete'
 
 
