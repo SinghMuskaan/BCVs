@@ -95,5 +95,5 @@ def process_single(filename: str, code):
             filehandle.write('%s\n\n' % sentence)
 
 
-if __name__ == "__main__":
-    process_single(filename="output//raw-transcripts//asrOutput.json", code="asefasawdac")
+# if __name__ == "__main__":
+#     process_single(filename="output//raw-transcripts//asrOutput.json", code="asefasawdac")

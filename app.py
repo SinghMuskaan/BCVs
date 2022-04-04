@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from utilities import amazon_transcribe, extract_asrOutput
 import json
+from meeting_summarization import generate_complete_file
 import asyncio
 from Handler import process_single
 
@@ -38,6 +39,10 @@ def process_input():
     print(res)
         
     print("response saved")
+    
+    print(f'generating final document for {code}')
+    generate_complete_file(f"output//processed-transcripts/{code}.txt")
+    print(f"final document processed for {code}")
 
     return 'process complete'
 

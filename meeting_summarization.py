@@ -3,7 +3,7 @@ import json
 from tqdm import tqdm
 import os
 import datetime 
-from transformers import pipeline
+from transformers import pipeline 
 
 import sys
 import datetime
@@ -15,7 +15,10 @@ tqdm.pandas()
 
 tqdm.pandas()
 
+print('downloading model')
 summarizer = pipeline("summarization", model="lidiya/bart-large-xsum-samsum")
+print('model downloaded')
+
 
 # list of regular expression to be forged in transcripts
 reg_ex = {
@@ -316,9 +319,9 @@ def prepare_document(attendee_str, body, annotator = 'DeepCON'):
   Document = f'{Date_}\n{attendee_str}\n\n\n{body}\n\nMinuted by: {annotator}'
   return Document
 
-if __name__ == "__main__":
+def generate_complete_file(path_to_file: str):
     # sample processing for single transcript
-    path_to_file = "output//processed-transcripts//asefasawdac.txt"
+    # path_to_file = "output//processed-transcripts//asefasawdac.txt"
     trans_dict = process_single(path_to_file)
     trans_dict.keys()
 
@@ -335,10 +338,10 @@ if __name__ == "__main__":
     # generate different segments of the processed meeting
     person_List = generate_person_list(output)
     attendees = generate_attendees(person_List) 
-    main_body = main_body(output)
+    main_body_ = main_body(output)
 
     # Assemle parts and preparing final minute:
-    DOCUMENT = prepare_document(attendees, main_body)
+    DOCUMENT = prepare_document(attendees, main_body_)
     print(DOCUMENT)
     # TODO Change this later
     process_code = "asefasawdac"

@@ -94,19 +94,18 @@ def extract_asrOutput(asr_url, path_to_raw_transcript: str, code):
                       'Accept-Encoding': 'none',
                       'Accept-Language': 'en-US,en;q=0.8',
                       'Connection': 'keep-alive'})
-  print(response)
+  
   response = urlopen(response, timeout=10)
-  print("hello2")
   data = json.loads(response.read())
   path_to_file = f"{path_to_raw_transcript}//{code}.json"
   with open(path_to_file, "w") as fp:
     json.dump(data, fp)
     
-def main():
+# def main():
       
-  url = "https://s3.ap-south-1.amazonaws.com/aws-transcribe-ap-south-1-prod/859116575611/9JOtPI0rhoJOSQN1/0b5141eb-d165-475b-ae27-b2f2b64f8280/asrOutput.json?X-Amz-Security-Token=IQoJb3JpZ2luX2VjENb%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCmFwLXNvdXRoLTEiRzBFAiBsFlnxUVH7TklcURb5vaQAQs%2BoOKsJCdFEoCdIWNoetwIhAORlhPBlrQtJGA%2BT7NFehbda%2BHdZj9eooEbueDffBJxHKvwDCC8QAxoMNjYzMDE5MTE5ODM2IgxncE8Sk%2Bvympw000Uq2QPyBaR%2BwbOQZVVP8G18rc76c4QgXQQklBwgiqECgbdsJOcN1HFJekDHFdsgkLNjc3OtQDZ8TxrRJPwznY0sxpaMVDVY2b0vbNdTF%2FVgmsqESInaij%2Bp1iMjUeZ1sxQiMIcQEuedTvi9Wu4YWKlrNImTjI5y5KeV6Gm5zk6BRrvMVv1%2BAdcBoeBqmYYYagr3z157jUdiHh5gzIBd1KQY%2BaS7oFC7NgG1MZmVVUtDhx2hQTboLl1r6D%2BiDzdppu3Y%2B3VrgmUaW2NNJKPPVq3BR8tTq2VOVR71FTVaKJbtr%2FxjG5rBiyUmN15H31XMkHSgkUGCQFi357QOXR%2F5ROavLX4NXjBSliLXqV2Ix99a%2BFemMXzngL09dybBaqwc8sskDPyk4GqNTelS8djJpb0RutfrQuCOQeTNADoZs0n%2FJqmdclml8nPOupL7Bp9mGZg5Qx%2BZPawFpMZV3AQWUNyTBlNVudgkXn8rHpMzmR%2FYMrXxkU8QIKUkeuOcFQREiIue2f%2FgoNHJlwYbdO9nw9xvty%2BuB4JvGj71KxCip0v9zEc4WVWGP8Mqe%2BitZwedtWejhf1zjHCDVy17yCX1OY%2FNPoU0dghs8iAKXlwFmjEPX4C6AdnQSkSSMaV%2F2TC3k8mQBjqlAVIzjFIw5OdkHsqKawogUT2bLdkM8%2BT6%2FZwwVSDnaetQ8ZDrw1IwU%2Boez8tM0Gya6%2FwtYOcgmT2EcC3trpzFoOxIFGO6bqyLHRl0XIsHcskYazTl0SQsf5ELLSreOkCMjwfgsDixn0DzT2sHP90LIsX1C3wldJ6OJgKI%2Fs%2BKXKTzV8HtUEorZY8NA3C7ENjf9lXI52W89PYIToVxDJ3v3apc8tve0Q%3D%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220220T144848Z&X-Amz-SignedHeaders=host&X-Amz-Expires=899&X-Amz-Credential=ASIAZUXYE4TOLOOHI76K%2F20220220%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Signature=df50b00a53a7d7b3cd84fde90d4f98dfa3d9b1063d728691269b9f2eda87a32a"
-  path_to_raw_transcript = ""
-  extract_asrOutput(url, path_to_raw_transcript, 'example1')
-if __name__ == '__main__':
+#   url = "https://s3.ap-south-1.amazonaws.com/aws-transcribe-ap-south-1-prod/859116575611/9JOtPI0rhoJOSQN1/0b5141eb-d165-475b-ae27-b2f2b64f8280/asrOutput.json?X-Amz-Security-Token=IQoJb3JpZ2luX2VjENb%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCmFwLXNvdXRoLTEiRzBFAiBsFlnxUVH7TklcURb5vaQAQs%2BoOKsJCdFEoCdIWNoetwIhAORlhPBlrQtJGA%2BT7NFehbda%2BHdZj9eooEbueDffBJxHKvwDCC8QAxoMNjYzMDE5MTE5ODM2IgxncE8Sk%2Bvympw000Uq2QPyBaR%2BwbOQZVVP8G18rc76c4QgXQQklBwgiqECgbdsJOcN1HFJekDHFdsgkLNjc3OtQDZ8TxrRJPwznY0sxpaMVDVY2b0vbNdTF%2FVgmsqESInaij%2Bp1iMjUeZ1sxQiMIcQEuedTvi9Wu4YWKlrNImTjI5y5KeV6Gm5zk6BRrvMVv1%2BAdcBoeBqmYYYagr3z157jUdiHh5gzIBd1KQY%2BaS7oFC7NgG1MZmVVUtDhx2hQTboLl1r6D%2BiDzdppu3Y%2B3VrgmUaW2NNJKPPVq3BR8tTq2VOVR71FTVaKJbtr%2FxjG5rBiyUmN15H31XMkHSgkUGCQFi357QOXR%2F5ROavLX4NXjBSliLXqV2Ix99a%2BFemMXzngL09dybBaqwc8sskDPyk4GqNTelS8djJpb0RutfrQuCOQeTNADoZs0n%2FJqmdclml8nPOupL7Bp9mGZg5Qx%2BZPawFpMZV3AQWUNyTBlNVudgkXn8rHpMzmR%2FYMrXxkU8QIKUkeuOcFQREiIue2f%2FgoNHJlwYbdO9nw9xvty%2BuB4JvGj71KxCip0v9zEc4WVWGP8Mqe%2BitZwedtWejhf1zjHCDVy17yCX1OY%2FNPoU0dghs8iAKXlwFmjEPX4C6AdnQSkSSMaV%2F2TC3k8mQBjqlAVIzjFIw5OdkHsqKawogUT2bLdkM8%2BT6%2FZwwVSDnaetQ8ZDrw1IwU%2Boez8tM0Gya6%2FwtYOcgmT2EcC3trpzFoOxIFGO6bqyLHRl0XIsHcskYazTl0SQsf5ELLSreOkCMjwfgsDixn0DzT2sHP90LIsX1C3wldJ6OJgKI%2Fs%2BKXKTzV8HtUEorZY8NA3C7ENjf9lXI52W89PYIToVxDJ3v3apc8tve0Q%3D%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20220220T144848Z&X-Amz-SignedHeaders=host&X-Amz-Expires=899&X-Amz-Credential=ASIAZUXYE4TOLOOHI76K%2F20220220%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Signature=df50b00a53a7d7b3cd84fde90d4f98dfa3d9b1063d728691269b9f2eda87a32a"
+#   path_to_raw_transcript = ""
+#   extract_asrOutput(url, path_to_raw_transcript, 'example1')
+# if __name__ == '__main__':
   
-  main()
+#   main()
