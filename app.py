@@ -45,18 +45,17 @@ def process_input():
     print("response done")
     print("----------------------------------------------") 
     print("response saved")
-    
-    
-    generate_complete_file(f"output//processed-transcripts/{code}.txt", code)
-    print(f"final document processed for {code}")
-    
-    generate_translated_document(process_code=code)
-    print(f'generated french minutes for {code}')
 
     # --new-- #
-    generate_keywords(process_code=code, path_to_transcripts_directory="output/processed-transcripts", path_to_keyword_directory="output/processed-keywords")
+    generate_keywords(process_code=code, path_to_transcripts_directory="output/processed-transcripts", path_to_keyword_directory="output/processed-keywords", ngram=3)
     print(f'generated keywords for {code}')
     # ------- #
+
+    generate_complete_file(f"output//processed-transcripts/{code}.txt", code)
+    print(f"generated minute for {code}")    
+
+    generate_translated_document(process_code=code)
+    print(f'generated french minutes for {code}')
 
     email_res = send_email(
             process_code=code,
