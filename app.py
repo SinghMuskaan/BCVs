@@ -48,6 +48,11 @@ def process_input():
     print("----------------------------------------------") 
     print("response saved")
 
+    # --new-- #
+    generate_keywords(process_code=code, path_to_transcripts_directory="output/processed-transcripts", path_to_keyword_directory="output/processed-keywords", ngram=3)
+    print(f'generated keywords for {code}')
+    # ------- #
+
     generate_complete_file(f"output//processed-transcripts/{code}.txt", code)
     print(f"final document processed for {code}")
 
