@@ -3,12 +3,10 @@ from utilities import amazon_transcribe, extract_asrOutput
 import json
 from meeting_summarization import generate_complete_file
 from mailing_module import send_email
-<<<<<<< HEAD
+
 from database_handler import update_values, find_value
-=======
 from database_handler import update_values
 from keyphrase_extraction import generate_keywords
->>>>>>> dea873ec321d608d6a264ab4aca3641c09b4b315
 from isometric_translation import generate_translated_document
 
 # import asyncio
