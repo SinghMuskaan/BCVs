@@ -3,14 +3,6 @@ from tqdm import tqdm
 import subprocess
 from transformers import MarianMTModel, MarianTokenizer
 
-# session = boto3.Session(
-#     aws_access_key_id='AKIA4QB2WTN57SCTNAGG',
-#     aws_secret_access_key='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',
-# )
-# s3 = session.resource('s3')
-# s3.meta.client.download_file(Bucket='mtacl', Key="helsinki_checkpoints_fr_3_epochs", Filename='model_checkpoints.zip')
-# subprocess.call(["unzip", "model_checkpoints.zip"])
-
 # utilities
   
 def read_minute(path_to_file):

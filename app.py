@@ -63,18 +63,17 @@ def process_input():
                   processing_status=True,
                   translated_status=True)
 
-    minutes_link, translated_link = find_value(code)
+    transcript_link, minutes_link, translated_link = find_value(code)
 
     email_res = send_email(
         process_code=code,
         receivers_name=receiver_name,
         receiver_email=receiver_email,
         sender=sender,
+        transcript_link=transcript_link,
         minutes_link=minutes_link,
         translated_link=translated_link
     )
-
-
 
     return 'process complete'
 
