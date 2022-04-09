@@ -4,4 +4,5 @@ output/meeting-minutes/*
 output/processed-transcripts/*
 output/meeting-minutes-french/*
 output/raw-transcripts/*
+output/processed-keywords/*
 !output/.gitkeep

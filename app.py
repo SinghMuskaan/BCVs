@@ -3,7 +3,12 @@ from utilities import amazon_transcribe, extract_asrOutput
 import json
 from meeting_summarization import generate_complete_file
 from mailing_module import send_email
+<<<<<<< HEAD
 from database_handler import update_values, find_value
+=======
+from database_handler import update_values
+from keyphrase_extraction import generate_keywords
+>>>>>>> dea873ec321d608d6a264ab4aca3641c09b4b315
 from isometric_translation import generate_translated_document
 
 # import asyncio
@@ -20,7 +25,6 @@ def method_name():
 @app.route('/getcode', methods=["POST", "GET"])
 def process_input():
     
-
     code = request.args.get('process_code')
     receiver_email = request.args.get('receiver_email')
     receiver_name = request.args.get('receiver_name')
@@ -29,7 +33,7 @@ def process_input():
     print("Receiver email: ", receiver_email)
     print("Receiver name: ", receiver_name)
     file_name = f"{code}.mp3"
-    res = amazon_transcribe(audio_file_name= file_name,
+    res = amazon_transcribe(audio_file_name=file_name,
                             max_speakers=6)
     
     url = res['TranscriptionJob']['Transcript']['TranscriptFileUri']
@@ -43,8 +47,7 @@ def process_input():
     process_single(path_to_file, code)
 
     print("response done")
-    print("-----------------------------------")
-        
+    print("----------------------------------------------") 
     print("response saved")
 
     generate_complete_file(f"output//processed-transcripts/{code}.txt", code)
@@ -69,9 +72,9 @@ def process_input():
     )
 
 
-
+    
+        
     return 'process complete'
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000)

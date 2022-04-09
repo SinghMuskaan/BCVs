@@ -4,7 +4,6 @@ import codecs
 import pandas as pd
 from tqdm import tqdm
 from collections import defaultdict
-
 tqdm.pandas()
 
 # utility
@@ -17,7 +16,6 @@ def get_json(path_to_file):
   with open(path_to_file, 'r') as openfile:
       articles = json.load(openfile)
   return articles
-
 
 # generate structured information from aws transcribe transcripts
 def process_aws_transcribe_output(filename: str):
@@ -93,7 +91,6 @@ def process_single(filename: str, code):
     with open(save_location, 'w') as filehandle:
         for sentence in sentences:
             filehandle.write('%s\n\n' % sentence)
-
 
 # if __name__ == "__main__":
 #     process_single(filename="output//raw-transcripts//asrOutput.json", code="asefasawdac")
