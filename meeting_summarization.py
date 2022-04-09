@@ -315,12 +315,6 @@ def generate_attendees(person_list):
   attendee_content = attendee_header + ', '.join(person_list)
   return attendee_content
 
-# generate meeting minute
-def prepare_document(attendee_str, body, keywords, annotator = 'DeepCON'):
-  Date_ = return_date()
-  Document = f'{Date_}\n{attendee_str}\n{keywords}\n\n\n{body}\n\nMinuted by: {annotator}'
-  return Document
-
 # generate keyword list
 def process_generated_keywords(process_code: str):
   path_to_directory = "output/processed-keywords"
@@ -334,6 +328,12 @@ def generate_keywords(keyword_list: list):
   keyword_header = "KEYWORDS: "
   keyword_content = keyword_header + "; ".join(keyword_list)
   return keyword_content
+
+# generate meeting minute
+def prepare_document(attendee_str, keywords_str, body, annotator = 'DeepCON'):
+  Date_ = return_date()
+  Document = f'{Date_}\n{attendee_str}\n{keywords_str}\n\n\n{body}\n\nMinuted by: {annotator}'
+  return Document
 
 def generate_complete_file(path_to_file: str, process_code: str):
     # sample processing for single transcript
@@ -359,7 +359,7 @@ def generate_complete_file(path_to_file: str, process_code: str):
     main_body_ = main_body(output)
 
     # Assemle parts and preparing final minute:
-    DOCUMENT = prepare_document(attendees, keywords, main_body_)
+    DOCUMENT = prepare_document(attendees_str=attendees, keywords_str=keywords, body=main_body_)
     print(DOCUMENT)
     # TODO Change this later
     convert_str_2_txt(DOCUMENT, process_code)
