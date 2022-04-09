@@ -21,7 +21,7 @@ def method_name():
 
 @app.route('/getcode', methods=["POST", "GET"])
 def process_input():
-    
+    # comment
     code = request.args.get('process_code')
     receiver_email = request.args.get('receiver_email')
     receiver_name = request.args.get('receiver_name')
