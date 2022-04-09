@@ -3,7 +3,7 @@ from utilities import amazon_transcribe, extract_asrOutput
 import json
 from meeting_summarization import generate_complete_file
 from mailing_module import send_email
-from database_handler import update_values
+from database_handler import update_values, find_value
 from isometric_translation import generate_translated_document
 
 # import asyncio
@@ -46,28 +46,30 @@ def process_input():
     print("-----------------------------------")
         
     print("response saved")
-    
-    
+
     generate_complete_file(f"output//processed-transcripts/{code}.txt", code)
     print(f"final document processed for {code}")
-    
+
     generate_translated_document(process_code=code)
     print(f'generated french minutes for {code}')
-    
-    
+
+    update_values(process_code=code,
+                  processing_status=True,
+                  translated_status=True)
+
+    minutes_link, translated_link = find_value(code)
+
     email_res = send_email(
-            process_code= code,
-            receivers_name= receiver_name,
-            receiver_email= receiver_email,
-            sender= sender
-        )
-        
-    update_values(process_code= code,
-                  processing_status= True,
-                  translated_status= True)
-    
-    
-        
+        process_code=code,
+        receivers_name=receiver_name,
+        receiver_email=receiver_email,
+        sender=sender,
+        minutes_link=minutes_link,
+        translated_link=translated_link
+    )
+
+
+
     return 'process complete'
 
 
