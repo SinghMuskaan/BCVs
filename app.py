@@ -72,8 +72,7 @@ def process_input():
     )
 
 
-    
-        
+
     return 'process complete'
 
 if __name__ == '__main__':
