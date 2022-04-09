@@ -1,3 +1,4 @@
+from ast import keyword
 import re
 import json
 from tqdm import tqdm
@@ -9,6 +10,7 @@ import sys
 import datetime
 import codecs
 import pandas as pd
+import textwrap
 from collections import defaultdict
 
 tqdm.pandas()
@@ -314,10 +316,24 @@ def generate_attendees(person_list):
   return attendee_content
 
 # generate meeting minute
-def prepare_document(attendee_str, body, annotator = 'DeepCON'):
+def prepare_document(attendee_str, body, keywords, annotator = 'DeepCON'):
   Date_ = return_date()
-  Document = f'{Date_}\n{attendee_str}\n\n\n{body}\n\nMinuted by: {annotator}'
+  Document = f'{Date_}\n{attendee_str}\n{keywords}\n\n\n{body}\n\nMinuted by: {annotator}'
   return Document
+
+# generate keyword list
+def process_generated_keywords(process_code: str):
+  path_to_directory = "output/processed-keywords"
+  path_to_directory = os.path.normpath(path_to_directory)
+  filename = f"{process_code}.txt"
+  path_to_file = os.path.join(path_to_directory, filename)
+  keywords = pd.read_csv(path_to_file)['text'].to_list()
+  return keywords
+
+def generate_keywords(keyword_list: list):
+  keyword_header = "KEYWORDS: "
+  keyword_content = keyword_header + "; ".join(keyword_list)
+  return keyword_content
 
 def generate_complete_file(path_to_file: str, process_code: str):
     # sample processing for single transcript
@@ -337,11 +353,13 @@ def generate_complete_file(path_to_file: str, process_code: str):
 
     # generate different segments of the processed meeting
     person_List = generate_person_list(output)
+    keywords_List = process_generated_keywords(process_code)
     attendees = generate_attendees(person_List) 
+    keywords = generate_keywords(keywords_List)
     main_body_ = main_body(output)
 
     # Assemle parts and preparing final minute:
-    DOCUMENT = prepare_document(attendees, main_body_)
+    DOCUMENT = prepare_document(attendees, keywords, main_body_)
     print(DOCUMENT)
     # TODO Change this later
     convert_str_2_txt(DOCUMENT, process_code)
