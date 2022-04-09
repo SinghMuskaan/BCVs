@@ -6,7 +6,7 @@ from mailing_module import send_email
 
 from database_handler import update_values, find_value
 from database_handler import update_values
-from keyphrase_extraction import generate_keywords
+from keyphrase_extraction import process_keyword
 from isometric_translation import generate_translated_document
 
 # import asyncio
@@ -49,7 +49,7 @@ def process_input():
     print("response saved")
 
     # --new-- #
-    generate_keywords(process_code=code, path_to_transcripts_directory="output/processed-transcripts", path_to_keyword_directory="output/processed-keywords", ngram=3)
+    process_keyword(process_code=code, path_to_transcripts_directory="output/processed-transcripts", path_to_keyword_directory="output/processed-keywords", ngram=3)
     print(f'generated keywords for {code}')
     # ------- #
 

@@ -325,7 +325,7 @@ def prepare_document(attendee_str, body, keywords, annotator = 'DeepCON'):
 def process_generated_keywords(process_code: str):
   path_to_directory = "output/processed-keywords"
   path_to_directory = os.path.normpath(path_to_directory)
-  filename = f"{process_code}.txt"
+  filename = f"{process_code}.csv"
   path_to_file = os.path.join(path_to_directory, filename)
   keywords = pd.read_csv(path_to_file)['text'].to_list()
   return keywords
