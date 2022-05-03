@@ -26,15 +26,22 @@ def process_input():
     code = request.args.get('process_code')
     receiver_email = request.args.get('receiver_email')
     receiver_name = request.args.get('receiver_name')
+    translation = request.args.get('translation').split()
+    num_speakers = int(request.args.get('num_speakers'))
+    length = request.args.get('length')
     sender = "deepconteam@gmail.com"
     print("code received: ", code)
     print("Receiver email: ", receiver_email)
     print("Receiver name: ", receiver_name)
+    print("Translation: ", translation)
+    print("minute length: ", length)
+    print("number of speakers: ", type(num_speakers))
     file_name = f"{code}.mp3"
     res = amazon_transcribe(audio_file_name=file_name,
-                            max_speakers=6)
+                            max_speakers=num_speakers)
     
     url = res['TranscriptionJob']['Transcript']['TranscriptFileUri']
+    print(url)
     print("----------------------------------------------")
     # save file locally 
     path_to_raw_transcript = "output//raw-transcripts"
@@ -53,7 +60,8 @@ def process_input():
     print(f'generated keywords for {code}')
     # ------- #
 
-    generate_complete_file(f"output//processed-transcripts/{code}.txt", code)
+    generate_complete_file(
+        f"output//processed-transcripts/{code}.txt", code, length=length)
     print(f"final document processed for {code}")
 
     generate_translated_document(process_code=code)
@@ -61,7 +69,8 @@ def process_input():
 
     update_values(process_code=code,
                   processing_status=True,
-                  translated_status=True)
+                  translated_status=True,
+                  languages=translation)
 
     transcript_link, minutes_link, translated_link = find_value(code)
 

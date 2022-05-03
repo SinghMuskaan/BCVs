@@ -32,5 +32,5 @@ def generate_translated_document(process_code):
   minute = read_minute(f"output/meeting-minutes/{process_code}.txt")
   translated_minutes = translate_minutes(minute)
 
-  path_to_file = f"output/meeting-minutes-french/{process_code}.txt"
+  path_to_file = f"output/meeting-minutes-translated/translated_fr_{process_code}.txt"
   save_2_text(translated_minutes, path_to_file)

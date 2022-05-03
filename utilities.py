@@ -97,7 +97,7 @@ def extract_asrOutput(asr_url, path_to_raw_transcript: str, code):
   
   response = urlopen(response, timeout=10)
   data = json.loads(response.read())
-  path_to_file = f"{path_to_raw_transcript}//{code}.json"
+  path_to_file = f"{path_to_raw_transcript}/{code}.json"
   with open(path_to_file, "w") as fp:
     json.dump(data, fp)
     

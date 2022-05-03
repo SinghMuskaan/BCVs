@@ -24,11 +24,13 @@ def s3_upload(processed_file_path, process_code, type):
     print(f"Upload Successful {type}_{process_code}")
 
 
-def update_values(process_code: str, processing_status, translated_status):
+def update_values(process_code: str, processing_status, translated_status, languages=[]):
+
 
     processed_transcript_file_path = f"output/processed-transcripts/{process_code}.txt"
     file_path = f'output/meeting-minutes/{process_code}.txt'
-    translated_file_path = f"output/meeting-minutes-french/{process_code}.txt"
+    languages_str = ' '.join(languages)
+
     status = False
     try:
         conn = MongoClient()
@@ -43,17 +45,27 @@ def update_values(process_code: str, processing_status, translated_status):
     db = client.MajorCMS
     collection = db.MajorCMS
 
-    s3_upload(processed_transcript_file_path, process_code=process_code, type="transcripts")
+    s3_upload(processed_transcript_file_path,
+              process_code=process_code, type="transcripts")
     s3_upload(file_path, process_code=process_code, type="minutes")
-    s3_upload(translated_file_path, process_code=process_code, type="translated")
     myquery = {"process_code": process_code}
     newvalues = {"$set": {"processing_status": processing_status,
                           'translated_status': translated_status,
                           "processed_transcript_link": f'https://deepcon-processed-minutes.s3.ap-south-1.amazonaws.com/transcripts_{process_code}',
                           "processed_minutes_link": f'https://deepcon-processed-minutes.s3.ap-south-1.amazonaws.com/minutes_{process_code}',
-                          "translated_minutes_link": f'https://deepcon-processed-minutes.s3.ap-south-1.amazonaws.com/translated_{process_code}'
+                          "languages": languages_str
+
                           }}
+
+    for i in languages:
+        translated_file_path = f"output/meeting-minutes-translated/translated_{i}_{process_code}.txt"
+        s3_upload(translated_file_path, process_code=process_code,
+                  type=f"translated_{i}")
+        newvalues["$set"][f'processed_{i}_translated_minutes_link'] = f'https://deepcon-processed-minutes.s3.ap-south-1.amazonaws.com/translated_{i}_{process_code}'
+
+    print(newvalues["$set"])
     res = collection.update_one(myquery, newvalues)
+    print
 
     return status
 
@@ -69,7 +81,7 @@ def find_value(process_code: str):
     for x in mydoc:
         transcript_link = x["processed_transcript_link"]
         minute_link = x['processed_minutes_link']
-        translated_link = x['translated_minutes_link']
+        translated_link = x['processed_fr_translated_minutes_link']
     
     return transcript_link, minute_link, translated_link
 

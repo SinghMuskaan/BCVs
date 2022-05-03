@@ -335,7 +335,16 @@ def prepare_document(attendee_str, keywords_str, body, annotator = 'DeepCON'):
   Document = f'{Date_}\n{attendee_str}\n{keywords_str}\n\n\n{body}\n\nMinuted by: {annotator}'
   return Document
 
-def generate_complete_file(path_to_file: str, process_code: str):
+def generate_complete_file(path_to_file: str, process_code: str, length: str):
+    
+    max_char = 0  
+    if length == 'short':
+          max_char = 1700
+    elif length == "medium":
+          max_char = 1000
+    else:
+          max_char = 500
+        
     # sample processing for single transcript
     # path_to_file = "output//processed-transcripts//asefasawdac.txt"
     trans_dict = process_single(path_to_file)
@@ -345,7 +354,7 @@ def generate_complete_file(path_to_file: str, process_code: str):
     meeting_conv = generate_dialogues(trans_dict["roles"], trans_dict["utterances"])
 
     # pratitioned document
-    processed_dict = doc_partitioning(meeting_conv, max_characters=500)
+    processed_dict = doc_partitioning(meeting_conv, max_characters=max_char)
 
     # apply summarizer to processed transcript
     output = apply_summarizer(processed_dict)
@@ -359,7 +368,7 @@ def generate_complete_file(path_to_file: str, process_code: str):
     main_body_ = main_body(output)
 
     # Assemle parts and preparing final minute:
-    DOCUMENT = prepare_document(attendees_str=attendees, keywords_str=keywords, body=main_body_)
+    DOCUMENT = prepare_document(attendee_str=attendees, keywords_str=keywords, body=main_body_)
     print(DOCUMENT)
     # TODO Change this later
     convert_str_2_txt(DOCUMENT, process_code)
