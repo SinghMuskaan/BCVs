@@ -4,6 +4,9 @@ import subprocess
 from transformers import MarianMTModel, MarianTokenizer
 
 # utilities
+
+#input: list of languages example : [fr,de]
+#task: save translation files to meeting-minutes-translated folder in format "translated_fr_processcode"
   
 def read_minute(path_to_file):
   with open(path_to_file, 'r') as f:
@@ -34,3 +37,4 @@ def generate_translated_document(process_code):
 
   path_to_file = f"output/meeting-minutes-translated/translated_fr_{process_code}.txt"
   save_2_text(translated_minutes, path_to_file)
+
