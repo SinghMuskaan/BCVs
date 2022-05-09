@@ -55,17 +55,17 @@ def process_input():
     print("----------------------------------------------") 
     print("response saved")
 
-    # --new-- #
     process_keyword(process_code=code, path_to_transcripts_directory="output/processed-transcripts", path_to_keyword_directory="output/processed-keywords", ngram=3)
     print(f'generated keywords for {code}')
-    # ------- #
-
-    generate_complete_file(
-        f"output/processed-transcripts/{code}.txt", code, length=length)
+        
+    translate_keywords(languages=translation, process_code=code)
+    print(f"generated translated keywords for {code}')
+    
+    generate_complete_file(f"output/processed-transcripts/{code}.txt", code, length=length)
     print(f"final document processed for {code}")
 
     generate_translated_document(languages=translation,  process_code=code)
-    print(f'generated french minutes for {code}')
+    print(f'generated translated minutes for {code}')
 
     update_values(process_code=code,
                   processing_status=True,
