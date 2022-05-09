@@ -314,23 +314,24 @@ def generate_attendees(person_list):
   return attendee_content
 
 # generate keyword list
-def process_generated_keywords(process_code: str):
-  path_to_directory = "output/processed-keywords"
-  path_to_directory = os.path.normpath(path_to_directory)
-  filename = f"{process_code}.csv"
-  path_to_file = os.path.join(path_to_directory, filename)
-  keywords = pd.read_csv(path_to_file)['text'].to_list()
-  return keywords
+# def process_generated_keywords(process_code: str):
+#   path_to_directory = "output/processed-keywords"
+#   path_to_directory = os.path.normpath(path_to_directory)
+#   filename = f"{process_code}.csv"
+#   path_to_file = os.path.join(path_to_directory, filename)
+#   keywords = pd.read_csv(path_to_file)['text'].to_list()
+#   return keywords
 
-def generate_keywords(keyword_list: list):
-  keyword_header = "KEYWORDS: "
-  keyword_content = keyword_header + "; ".join(keyword_list)
-  return keyword_content
+# def generate_keywords(keyword_list: list):
+#   keyword_header = "KEYWORDS: "
+#   keyword_content = keyword_header + "; ".join(keyword_list)
+#   return keyword_content
 
 # generate meeting minute
-def prepare_document(attendee_str, keywords_str, body, annotator = 'DeepCON'):
+def prepare_document(attendee_str, body, annotator = 'DeepCON'):
   Date_ = return_date()
-  Document = f'{Date_}\n{attendee_str}\n{keywords_str}\n\n\n{body}\n\nMinuted by: {annotator}'
+  # Document = f'{Date_}\n{attendee_str}\n{keywords_str}\n\n\n{body}\n\nMinuted by: {annotator}'
+  Document = f'{Date_}\n{attendee_str}\n\n\n{body}\n\nMinuted by: {annotator}'
   return Document
 
 def generate_complete_file(path_to_file: str, process_code: str, length: str):
@@ -360,13 +361,14 @@ def generate_complete_file(path_to_file: str, process_code: str, length: str):
 
     # generate different segments of the processed meeting
     person_List = generate_person_list(output)
-    keywords_List = process_generated_keywords(process_code)
+    # keywords_List = process_generated_keywords(process_code)
     attendees = generate_attendees(person_List) 
-    keywords = generate_keywords(keywords_List)
+    # keywords = generate_keywords(keywords_List)
     main_body_ = main_body(output)
 
     # Assemle parts and preparing final minute:
-    DOCUMENT = prepare_document(attendee_str=attendees, keywords_str=keywords, body=main_body_)
+    # DOCUMENT = prepare_document(attendee_str=attendees, keywords_str=keywords, body=main_body_)
+    DOCUMENT = prepare_document(attendee_str=attendees, body=main_body_)
     print(DOCUMENT)
     # TODO Change this later
     convert_str_2_txt(DOCUMENT, process_code)
