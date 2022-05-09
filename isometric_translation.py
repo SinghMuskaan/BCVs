@@ -67,6 +67,34 @@ language_2_para_model_mappings = {
     'ru': 'enimai/mbart-large-50-paraphrase-finetuned-for-ru'
 }
 
+def simple_translation(
+    text: str, 
+    tokenizer: transformers.models.marian.tokenization_marian.MarianTokenizer, 
+    model: transformers.models.marian.modeling_marian.MarianMTModel
+):
+  output = []
+  translated = model.generate(**tokenizer(text, return_tensors="pt", padding=True))  
+  output.extend([tokenizer.decode(t, skip_special_tokens=True) for t in translated])
+  return output
+
+def translate_keywords(languages, process_code):
+    current_directory = os.getcwd()
+    path_to_output_folder = os.path.join(current_directory, "output")
+    path_to_keywords_folder = os.path.join(path_to_output_folder, 'processed-keywords')
+    path_to_translated_keywords_folder = os.path.join(path_to_output_folder, 'keywords-translated')
+    path_to_keyword_file = [os.path.join(path_to_keywords_folder, file) for file in os.listdir(path_to_keywords_folder) if file == f"{process_code}.csv"][0]
+    for language in languages:
+      df = pd.read_csv(path_to_keyword_file)
+      model_name = language_2_mt_model_mappings[language]
+      tokenizer = MarianTokenizer.from_pretrained(model_name)
+      model = MarianMTModel.from_pretrained(model_name)
+      translated_texts = []
+      for index, row in df.iterrows():
+        translated_texts.extend(simple_translation(row['text']))
+      translated_df = pd.DataFrame({'text': translated_texts})
+      path_to_translated_keyword_file = os.path.join(path_to_translated_keywords_folder, f"translated_{language}_{process_code}.csv")
+      translated_df.to_csv(path_to_translated_keyword_file, index=False)
+    
 def process_translation(languages, process_code):
     current_directory = os.getcwd()
     path_to_output_folder = os.path.join(current_directory, "output")
