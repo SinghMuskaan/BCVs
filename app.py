@@ -7,7 +7,7 @@ from mailing_module import send_email
 from database_handler import update_values, find_value
 from database_handler import update_values
 from keyphrase_extraction import process_keyword
-from isometric_translation import generate_translated_document
+from isometric_translation import generate_translated_document, translate_keywords
 
 # import asyncio
 from Handler import process_single
@@ -59,7 +59,7 @@ def process_input():
     print(f'generated keywords for {code}')
         
     translate_keywords(languages=translation, process_code=code)
-    print(f"generated translated keywords for {code}')
+    print(f"generated translated keywords for {code}")
     
     generate_complete_file(f"output/processed-transcripts/{code}.txt", code, length=length)
     print(f"final document processed for {code}")
