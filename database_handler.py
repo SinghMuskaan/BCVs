@@ -25,10 +25,10 @@ def s3_upload(processed_file_path, process_code, type):
 
 
 def update_values(process_code: str, processing_status, translated_status, languages=[]):
-
-
+    
     processed_transcript_file_path = f"output/processed-transcripts/{process_code}.txt"
     file_path = f'output/meeting-minutes/{process_code}.txt'
+    keywords_file_path = f'output/processed-keywords/{process_code}.csv'
     languages_str = ' '.join(languages)
 
     status = False
@@ -45,24 +45,23 @@ def update_values(process_code: str, processing_status, translated_status, langu
     db = client.MajorCMS
     collection = db.MajorCMS
 
-    s3_upload(processed_transcript_file_path,
-              process_code=process_code, type="transcripts")
+    s3_upload(processed_transcript_file_path, process_code=process_code, type="transcripts")
     s3_upload(file_path, process_code=process_code, type="minutes")
+    s3_upload(keywords_file_path, process_code=process_code, type="keywords")
     myquery = {"process_code": process_code}
     newvalues = {"$set": {"processing_status": processing_status,
                           'translated_status': translated_status,
                           "processed_transcript_link": f'https://deepcon-processed-minutes.s3.ap-south-1.amazonaws.com/transcripts_{process_code}',
                           "processed_minutes_link": f'https://deepcon-processed-minutes.s3.ap-south-1.amazonaws.com/minutes_{process_code}',
+                          "processed_keywords": f'https://deepcon-processed-minutes.s3.ap-south-1.amazonaws.com/keywords_{process_code}',
                           "languages": languages_str
-
                           }}
-
     for i in languages:
         translated_file_path = f"output/meeting-minutes-translated/translated_{i}_{process_code}.txt"
         s3_upload(translated_file_path, process_code=process_code,
                   type=f"translated_{i}")
         newvalues["$set"][f'processed_{i}_translated_minutes_link'] = f'https://deepcon-processed-minutes.s3.ap-south-1.amazonaws.com/translated_{i}_{process_code}'
-
+        
     print(newvalues["$set"])
     res = collection.update_one(myquery, newvalues)
     print
