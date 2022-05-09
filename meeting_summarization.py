@@ -304,7 +304,7 @@ def generate_person_list(output):
 
 # convert generated document to text file
 def convert_str_2_txt(document: str, process_code: str):
-  file_name = f'output//meeting-minutes//{process_code}.txt'
+  file_name = f'output/meeting-minutes/{process_code}.txt'
   with open(file_name, "w") as text_file:
     text_file.write(document)
   return file_name

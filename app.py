@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, request
 from utilities import amazon_transcribe, extract_asrOutput
 import json
 from meeting_summarization import generate_complete_file
@@ -44,11 +44,11 @@ def process_input():
     print(url)
     print("----------------------------------------------")
     # save file locally 
-    path_to_raw_transcript = "output//raw-transcripts"
+    path_to_raw_transcript = "output/raw-transcripts"
     extract_asrOutput(url, path_to_raw_transcript, code)
 
     # process asrOutput 
-    path_to_file = f"{path_to_raw_transcript}//{code}.json"
+    path_to_file = f"{path_to_raw_transcript}/{code}.json"
     process_single(path_to_file, code)
 
     print("response done")
@@ -61,10 +61,10 @@ def process_input():
     # ------- #
 
     generate_complete_file(
-        f"output//processed-transcripts/{code}.txt", code, length=length)
+        f"output/processed-transcripts/{code}.txt", code, length=length)
     print(f"final document processed for {code}")
 
-    generate_translated_document(process_code=code)
+    generate_translated_document(languages=translation,  process_code=code)
     print(f'generated french minutes for {code}')
 
     update_values(process_code=code,
