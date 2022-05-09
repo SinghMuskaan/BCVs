@@ -53,7 +53,7 @@ def update_values(process_code: str, processing_status, translated_status, langu
                           'translated_status': translated_status,
                           "processed_transcript_link": f'https://deepcon-processed-minutes.s3.ap-south-1.amazonaws.com/transcripts_{process_code}',
                           "processed_minutes_link": f'https://deepcon-processed-minutes.s3.ap-south-1.amazonaws.com/minutes_{process_code}',
-                          "processed_keywords": f'https://deepcon-processed-minutes.s3.ap-south-1.amazonaws.com/keywords_{process_code}',
+                          "processed_keywords_link": f'https://deepcon-processed-minutes.s3.ap-south-1.amazonaws.com/keywords_{process_code}',
                           "languages": languages_str
                           }}
     for i in languages:
