@@ -15,8 +15,6 @@ from collections import defaultdict
 
 tqdm.pandas()
 
-tqdm.pandas()
-
 print('downloading model')
 summarizer = pipeline("summarization", model="lidiya/bart-large-xsum-samsum")
 print('model downloaded')
