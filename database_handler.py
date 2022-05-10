@@ -58,9 +58,13 @@ def update_values(process_code: str, processing_status, translated_status, langu
                           }}
     for i in languages:
         translated_file_path = f"output/meeting-minutes-translated/translated_{i}_{process_code}.txt"
-        s3_upload(translated_file_path, process_code=process_code,
-                  type=f"translated_{i}")
+        s3_upload(translated_file_path, process_code=process_code, type=f"translated_{i}")
         newvalues["$set"][f'processed_{i}_translated_minutes_link'] = f'https://deepcon-processed-minutes.s3.ap-south-1.amazonaws.com/translated_{i}_{process_code}'
+     
+    for i in languages:
+        translated_keywords_file_path = f"output/keywords-translated/translated_{i}_{process_code}.csv"
+        s3_upload(translated_keywords_file_path, process_code=process_code, type=f"translated_keywords_{i}")
+        newvalues["$set"][f'processed_{i}_translated_keywords'] = f'https://deepcon-processed-minutes.s3.ap-south-1.amazonaws.com/translated_keywords_{i}_{process_code}'
         
     print(newvalues["$set"])
     res = collection.update_one(myquery, newvalues)
