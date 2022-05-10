@@ -3,7 +3,7 @@ major_server/
 output/meeting-minutes/*
 output/meeting-minutes-translated/*
 output/processed-transcripts/*
-output/meeting-minutes-french/*
 output/raw-transcripts/*
 output/processed-keywords/*
+output/keywords-translated/*
 !output/.gitkeep
