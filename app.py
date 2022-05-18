@@ -54,7 +54,9 @@ def process_input():
     print("response done")
     print("----------------------------------------------") 
     print("response saved")
-
+    
+    language_str = ", ".join(translation)
+    
     process_keyword(process_code=code, path_to_transcripts_directory="output/processed-transcripts", path_to_keyword_directory="output/processed-keywords", ngram=3)
     print(f'generated keywords for {code}')
         
@@ -62,10 +64,13 @@ def process_input():
     print(f"generated translated keywords for {code}")
     
     generate_complete_file(f"output/processed-transcripts/{code}.txt", code, length=length)
-    print(f"final document processed for {code}")
+    print(f"processed ASR transcripts for {code}")
+    
+    generate_translated_document(languages=translation, process_code=code, process_type="trans")
+    print(f'generated translated transcripts for {code} and language {language_str}')
 
     generate_translated_document(languages=translation,  process_code=code)
-    print(f'generated translated minutes for {code}')
+    print(f'generated translated minutes for {code} and language {language_str}')
 
     update_values(process_code=code,
                   processing_status=True,
