@@ -8,5 +8,6 @@ output/processed-keywords/*
 output/keywords-translated/*
 output/keywords-translated/*
 output/meeting-minutes-french/*
+output/transcripts-translated/*
 
 !output/.gitkeep
