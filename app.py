@@ -64,7 +64,7 @@ def process_input():
     print(f"generated translated keywords for {code}")
     
     generate_complete_file(f"output/processed-transcripts/{code}.txt", code, length=length)
-    print(f"processed ASR transcripts for {code}")
+    print(f"generated minutes for {code}")
     
     generate_translated_document(languages=translation, process_code=code, process_type="trans")
     print(f'generated translated transcripts for {code} and language {language_str}')
