@@ -261,12 +261,12 @@ def process_transcripts_paraphrase(languages, process_code):
         save_2_text(processed_translated, path_to_translated_file)
 
 def generate_translated_document(languages, process_code, process_type="min"):
-    if process_type == "min"
+    if process_type == "min":
       # generate translation
       process_translation(languages=languages, process_code=process_code)  
       # rephrase translation for isometric   
       process_paraphrase(languages=languages, process_code=process_code)
-    else: 
+    elif process_type == "trans": 
       # generate translation
       process_transcripts_translation(languages=languages, process_code=process_code)
       # rephrase translation for isometric
