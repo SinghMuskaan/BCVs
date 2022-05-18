@@ -203,7 +203,7 @@ def process_transcripts_paraphrase(languages, process_code):
         path_to_transcript_folder = os.path.join(path_to_output_folder, 'processed-transcripts')
         path_to_translated_transcripts_folder = os.path.join(path_to_output_folder, 'transcripts-translated')    
         path_to_transcripts_file = [os.path.join(path_to_transcript_folder, file) for file in os.listdir(path_to_transcript_folder) if file == f"{process_code}.txt"][0]    
-        path_to_translated_file = [os.path.join(path_to_translated_minutes_folder, file) for file in os.listdir(path_to_translated_minutes_folder) if file == f"translated_{language}_{process_code}.txt"][0]
+        path_to_translated_file = [os.path.join(path_to_translated_transcripts_folder, file) for file in os.listdir(path_to_translated_transcripts_folder) if file == f"translated_{language}_{process_code}.txt"][0]
        
       
         transcripts = read_minute(path_to_transcripts_file)
