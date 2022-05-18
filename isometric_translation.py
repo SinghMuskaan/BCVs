@@ -90,7 +90,8 @@ def translate_keywords(languages, process_code):
       model = MarianMTModel.from_pretrained(model_name)
       translated_texts = []
       for index, row in df.iterrows():
-        translated_texts.extend(simple_translation(row['text']))
+        translated_texts.extend(
+            simple_translation(row['text'], tokenizer, model))
       translated_df = pd.DataFrame({'text': translated_texts})
       path_to_translated_keyword_file = os.path.join(path_to_translated_keywords_folder, f"translated_{language}_{process_code}.csv")
       translated_df.to_csv(path_to_translated_keyword_file, index=False)

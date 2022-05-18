@@ -6,4 +6,7 @@ output/processed-transcripts/*
 output/raw-transcripts/*
 output/processed-keywords/*
 output/keywords-translated/*
+output/keywords-translated/*
+output/meeting-minutes-french/*
+
 !output/.gitkeep
