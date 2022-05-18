@@ -191,10 +191,83 @@ def process_paraphrase(languages, process_code):
 
         processed_translated = processed_pred_df["target_text"].to_list()
         save_2_text(processed_translated, path_to_translated_file)
+        
+def process_transcripts_paraphrase(languages, process_code):
+    para_languages = list(language_2_para_model_mappings.keys())
+    for language in languages:
+        if language not in para_languages:
+            continue
+            
+        current_directory = os.getcwd()
+        path_to_output_folder = os.path.join(current_directory, "output")
+        path_to_transcript_folder = os.path.join(path_to_output_folder, 'processed-transcripts')
+        path_to_translated_transcripts_folder = os.path.join(path_to_output_folder, 'transcripts-translated')    
+        path_to_transcripts_file = [os.path.join(path_to_transcript_folder, file) for file in os.listdir(path_to_transcript_folder) if file == f"{process_code}.txt"][0]    
+        path_to_translated_file = [os.path.join(path_to_translated_minutes_folder, file) for file in os.listdir(path_to_translated_minutes_folder) if file == f"translated_{language}_{process_code}.txt"][0]
+       
+      
+        transcripts = read_minute(path_to_transcripts_file)
+        translated = read_minute(path_to_translated_file)
+
+        model_name = language_2_para_model_mappings[language]
+        tokenizer = AutoTokenizer.from_pretrained(model_name)
+        model = MBartForConditionalGeneration.from_pretrained(model_name)
+
+        pred_df = pd.DataFrame({
+            'input_text': transcripts,
+            'target_text': translated
+        })
+
+        # check if mt_prediction -> input length ratio is normal
+        pred_df["is_normal"] = pred_df.progress_apply(
+            lambda row: check_for_verbosity(row['input_text'], row['target_text']),
+            axis=1
+        )
+        not_normal_seq_index = pred_df.index[pred_df['is_normal'] == True].to_list()
+        columns = ["input_text", "target_text"]
+        pred_normal_df = pred_df[~pred_df.index.isin(not_normal_seq_index)][columns]
+        pred_not_normal_df = pred_df[pred_df.index.isin(not_normal_seq_index)][columns]
+
+        # apply paraphrase prompt 
+        pred_not_normal_df["target_text"] = pred_not_normal_df.progress_apply(
+            lambda row: append_paraphrase_prompt(row['input_text'], row['target_text']),
+            axis=1
+        )
+
+        # temp folder to store files
+        path_to_temp_folder = os.path.join(current_directory, f"temp_{process_code}")
+        if not os.path.exists(path_to_temp_folder):
+            os.makedirs(path_to_temp_folder)
 
 
-def generate_translated_document(languages, process_code):
-    # generate translation
-    process_translation(languages=languages, process_code=process_code)  
-    # rephrase translation for isometric   
-    process_paraphrase(languages=languages, process_code=process_code)
+        path_to_not_normal_file = os.path.join(path_to_temp_folder, "test_not_normal.csv")
+        path_to_normal_file = os.path.join(path_to_temp_folder, "test_normal.csv")
+        pred_not_normal_df.to_csv(path_to_not_normal_file, index=False)
+        pred_normal_df.to_csv(path_to_normal_file, index=False)
+
+        processed_raw_test_dataset = load_dataset('csv', data_files={"test": path_to_not_normal_file})
+        test_dataloader = DataLoader(processed_raw_test_dataset["test"], batch_size=1, num_workers=0)
+
+        predictions = []
+        for batch in tqdm(test_dataloader):
+            translated = model.generate(**tokenizer(batch['target_text'], return_tensors="pt", padding=True))
+            predictions.extend([tokenizer.decode(t, skip_special_tokens=True) for t in translated])
+
+        pred_not_normal_df["target_text"] = predictions
+        processed_pred_df = pd.concat([pred_normal_df, pred_not_normal_df]).sort_index()
+        shutil.rmtree(path_to_temp_folder)
+
+        processed_translated = processed_pred_df["target_text"].to_list()
+        save_2_text(processed_translated, path_to_translated_file)
+
+def generate_translated_document(languages, process_code, process_type="min"):
+    if process_type == "min"
+      # generate translation
+      process_translation(languages=languages, process_code=process_code)  
+      # rephrase translation for isometric   
+      process_paraphrase(languages=languages, process_code=process_code)
+    else: 
+      # generate translation
+      process_transcripts_translation(languages=languages, process_code=process_code)
+      # rephrase translation for isometric
+      process_transcripts_paraphrase(languages=languages, process_code=process_code)
