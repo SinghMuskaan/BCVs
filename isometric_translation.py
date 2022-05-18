@@ -96,6 +96,21 @@ def translate_keywords(languages, process_code):
       path_to_translated_keyword_file = os.path.join(path_to_translated_keywords_folder, f"translated_{language}_{process_code}.csv")
       translated_df.to_csv(path_to_translated_keyword_file, index=False)
     
+def process_transcripts_translation(languages, process_code):
+    current_directory = os.getcwd()
+    path_to_output_folder = os.path.join(current_directory, "output")
+    path_to_transcript_folder = os.path.join(path_to_output_folder, 'processed-transcripts')
+    path_to_translated_transcripts_folder = os.path.join(path_to_output_folder, 'transcripts-translated')
+    path_to_transcripts_file = [os.path.join(path_to_transcript_folder, file) for file in os.listdir(path_to_transcript_folder) if file == f"{process_code}.txt"][0]    
+    for language in languages:
+        transcripts = read_minute(path_to_transcripts_file)
+        model_name = language_2_mt_model_mappings[language]
+        tokenizer = MarianTokenizer.from_pretrained(model_name)
+        model = MarianMTModel.from_pretrained(model_name)
+        translated = translate_minutes(transcripts, tokenizer, model)
+        path_to_translated_file = os.path.join(path_to_translated_transcripts_folder, f"translated_{language}_{process_code}.txt")
+        save_2_text(translated, path_to_translated_file)    
+    
 def process_translation(languages, process_code):
     current_directory = os.getcwd()
     path_to_output_folder = os.path.join(current_directory, "output")
