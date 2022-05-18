@@ -56,6 +56,12 @@ def update_values(process_code: str, processing_status, translated_status, langu
                           "processed_keywords_link": f'https://deepcon-processed-minutes.s3.ap-south-1.amazonaws.com/keywords_{process_code}',
                           "languages": languages_str
                           }}
+    
+    for i in languages:
+        translated_file_path = f"output/transcripts-translated/translated_{i}_{process_code}.txt"
+        s3_upload(translated_file_path, process_code=process_code, type=f"translated_transcripts_{i}")
+        newvalues["$set"][f'processed_{i}_translated_transcripts'] = f'https://deepcon-processed-minutes.s3.ap-south-1.amazonaws.com/translated_transcripts_{i}_{process_code}'
+    
     for i in languages:
         translated_file_path = f"output/meeting-minutes-translated/translated_{i}_{process_code}.txt"
         s3_upload(translated_file_path, process_code=process_code, type=f"translated_{i}")
