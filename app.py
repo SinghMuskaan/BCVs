@@ -1,6 +1,8 @@
+from http import server
 from flask import Flask, request
 from utilities import amazon_transcribe, extract_asrOutput
 import json
+import time
 from meeting_summarization import generate_complete_file
 from mailing_module import send_email
 
@@ -28,6 +30,7 @@ def process_input():
     receiver_name = request.args.get('receiver_name')
     translation = request.args.get('translation').split()
     num_speakers = int(request.args.get('num_speakers'))
+    frontend_start_time = float(request.args.get('frontend_start_time'))
     length = request.args.get('length')
     sender = "deepconteam@gmail.com"
     print("code received: ", code)
@@ -66,8 +69,8 @@ def process_input():
     generate_complete_file(f"output/processed-transcripts/{code}.txt", code, length=length)
     print(f"generated minutes for {code}")
     
-    generate_translated_document(languages=translation, process_code=code, process_type="trans")
-    print(f'generated translated transcripts for {code} and language {language_str}')
+    # generate_translated_document(languages=translation, process_code=code, process_type="trans")
+    # print(f'generated translated transcripts for {code} and language {language_str}')
 
     generate_translated_document(languages=translation,  process_code=code)
     print(f'generated translated minutes for {code} and language {language_str}')
@@ -79,17 +82,21 @@ def process_input():
 
     # transcript_link, minutes_link, translated_link = find_value(code)
 
-    # email_res = send_email(
-    #     process_code=code,
-    #     receivers_name=receiver_name,
-    #     receiver_email=receiver_email,
-    #     sender=sender,
-    #     transcript_link=transcript_link,
-    #     minutes_link=minutes_link,
-    #     translated_link=translated_link
-    # )
+    email_res = send_email(
+        process_code=code,
+        receivers_name=receiver_name,
+        receiver_email=receiver_email,
+        sender=sender,
+        transcript_link="",
+        minutes_link="",
+        translated_link=""
+    )
+    
+    server_complete_time = time.time()
+    processing_time = server_complete_time - frontend_start_time
+    print(f'Total response time for processing is {processing_time}')
 
     return 'process complete'
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000)
+    app.run(host='0.0.0.0', port=9000)

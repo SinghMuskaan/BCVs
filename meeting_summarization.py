@@ -15,9 +15,9 @@ from collections import defaultdict
 
 tqdm.pandas()
 
-print('downloading model')
-summarizer = pipeline("summarization", model="lidiya/bart-large-xsum-samsum")
-print('model downloaded')
+# print('downloading model')
+# summarizer = pipeline("summarization", model="lidiya/bart-large-xsum-samsum")
+# print('model downloaded')
 
 
 # list of regular expression to be forged in transcripts
@@ -256,6 +256,9 @@ def doc_partitioning(document, max_characters=500):
 # summarization and minute generation.
 def apply_summarizer(processed_dict):
   output = []
+  print('downloading model')
+  summarizer = pipeline("summarization", model="lidiya/bart-large-xsum-samsum")
+  print('model downloaded') 
   for key in tqdm(processed_dict.keys(), total=len(processed_dict.keys())):
     result = summarizer(processed_dict[key])
     output.append(result[0]['summary_text'])

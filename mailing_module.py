@@ -6,18 +6,16 @@ EMAIL_USER = os.getenv("EMAIL_USER")
 EMAIL_USER_PASSWORD = os.getenv("EMAIL_USER_PASSWORD")
 
 def generate_process_code():
-    x = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(16))
+    x = ''.join(random.choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(4))
     return x
 
-def generate_mail(transcript_link, translated_link, minutes_link,user_name="user", process_code=""):
+def generate_mail(transcript_link="", translated_link="", minutes_link="",user_name="user", process_code=""):
 
     # process_code = generate_process_code()
     SUBJECT = "[ALERT] DeepCon Processing Complete."
-    TEXT = f"""Hello {user_name}, We're glad that you've chosen DeepCon. your processing of request is completed and you can download files from our website. Please find the information below: \n
-    1. Your Request Number: {process_code}\n
-    2. Transcript Link: {transcript_link}\n
-    3. Minutes Link: {minutes_link}\n
-    4. Translated Minuted Link: {translated_link}"""
+    TEXT = f"""Hello {user_name}, We're glad that you've chosen DeepCon. your processing of request is completed and you can download files from our website.
+                Your Request Number is {process_code} \n
+                You can download the results from http://localhost:3000/get-transcript"""
 
     return SUBJECT, TEXT
 
