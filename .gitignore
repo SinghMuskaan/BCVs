@@ -1,5 +1,6 @@
 major_server/
 .env
+.my-project-5149-google-sheets-service-account-keys.json
 output/meeting-minutes/*
 output/meeting-minutes-translated/*
 output/processed-transcripts/*
@@ -9,5 +10,4 @@ output/keywords-translated/*
 output/keywords-translated/*
 output/meeting-minutes-french/*
 output/transcripts-translated/*
-
 !output/.gitkeep
