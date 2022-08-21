@@ -14,6 +14,7 @@ Original file is located at
 from oauth2client.service_account import ServiceAccountCredentials
 import gspread
 import re
+import os
 import torch
 import numpy as np
 import pandas as pd
@@ -41,6 +42,7 @@ def get_gsheets_data(url):
   english_tweets = df['Tweet (translated)'].tolist() # get french tweets english translations
   return french_tweets, english_tweets
 
+# utility methods
 # remove punctuations
 def remove_punkts(text: str):
   pattern = "[!\"#$%&'()*+,\-/:;<=>?@[\]^_`{|}~.]"
@@ -59,10 +61,15 @@ def generate_tweets_passgae(tweets: list):
   passage_tweets = ".".join(cleaned_tweets)  
   return passage_tweets
 
+# save text to .txt file 
+def save_2_text(path_to_file: str, text: str):
+  with open(path_to_file, 'w') as f:
+    f.write(text)
+
 def summarize_english_text(
     text: str,
-    model = english_model,
-    tokenizer = english_tokenizer,
+    model,
+    tokenizer,
     max_input_length: int = 512,
     min_output_length: int = 20,
     max_output_length: int = 50,
@@ -74,8 +81,8 @@ def summarize_english_text(
 
 def summarize_french_text(
     text: str,
-    model = french_model,
-    tokenizer = french_tokenizer,
+    model,
+    tokenizer,
     max_input_length: int = 512,
     min_output_length: int = 200,
     max_output_length: int = 300,
@@ -84,11 +91,11 @@ def summarize_french_text(
   summary_ids = model.generate(**inputs.to(device), min_length=min_output_length, max_length=max_output_length, no_repeat_ngram_size=2, num_beams=2)
   return tokenizer.batch_decode(summary_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0]
 
-# keyword -> url map should be prepared first
-# https://docs.google.com/spreadsheets/d/10AbLQE2FLps48_AhOl7A5XY26Km7EESQFTB0nBPrFU4/edit#gid=0
+# need to prepare and save a map from keyword -> multiple gsheets urls
 
 class Tweets_Summarizer():
-  def __init__(self, gsheets_url, french_tokenizer, french_model, english_tokenizer, english_model):
+  def __init__(self, process_code, gsheets_url, french_tokenizer, french_model, english_tokenizer, english_model):
+    self.process_code = process_code
     self.gsheets_url = gsheets_url
     self.french_tokenizer = french_tokenizer
     self.french_model = french_model
@@ -96,6 +103,11 @@ class Tweets_Summarizer():
     self.english_model = english_model
     self.get_french_and_engish_tweets()
     self.process_french_and_english_tweets()
+
+    # save paths
+    self.path_to_output_folder = os.path.join(os.getcwd(), "output")
+    self.path_to_french_summary_folder = os.path.join(self.path_to_output_folder, "french_summaries")
+    self.path_to_english_summary_folder = os.path.join(self.path_to_output_folder, "english_summaries")
 
   def __repr__(self):
     return f"url: {self.gsheets_url}"
@@ -111,6 +123,7 @@ class Tweets_Summarizer():
     self.passage_english_tweets = generate_tweets_passgae(self.english_tweets)
 
   def generate_summaries(self):
+    print("generating french summaries")
     french_summary = summarize_french_text(
         text=self.passage_french_tweets,
         model=self.french_model,
@@ -119,6 +132,8 @@ class Tweets_Summarizer():
         max_output_length=400,
         min_output_length=200
     )
+
+    print("generating english summaries")
     english_summary = summarize_english_text(
         text=self.passage_english_tweets,
         model=self.english_model,
@@ -127,7 +142,17 @@ class Tweets_Summarizer():
         max_output_length=400,
         min_output_length=200
     )
-    return french_summary, english_summary
+
+    print(f"French: {french_summary}")
+    print(f"English: {english_summary}")
+
+    print(f"saving files locally under {self.path_to_output_folder}")
+    french_summary_filename = f"{self.process_code}.txt"
+    english_summary_filename = f"{self.process_code}.txt"
+    print(self.path_to_french_summary_folder)
+    save_2_text(path_to_file = os.path.join(self.path_to_french_summary_folder, french_summary_filename), text = french_summary)
+    print(self.path_to_english_summary_folder)
+    save_2_text(path_to_file = os.path.join(self.path_to_english_summary_folder, english_summary_filename), text = english_summary)
 
 if __name__ == "__main__":
   # define model checkpoints
@@ -145,6 +170,7 @@ if __name__ == "__main__":
 
   # define Tweets_Summarizer object
   tweets_summarizer = Tweets_Summarizer(
+    process_code = "yXam",
     gsheets_url = "https://docs.google.com/spreadsheets/d/10AbLQE2FLps48_AhOl7A5XY26Km7EESQFTB0nBPrFU4/edit#gid=0",
     french_tokenizer = french_tokenizer,
     french_model = french_model,
@@ -152,7 +178,7 @@ if __name__ == "__main__":
     english_model = english_model
   )
 
-  french_summary, english_summary = tweets_summarizer.generate_summaries()  
+  tweets_summarizer.generate_summaries()  
   print(f"French: {french_summary}")
   print(f"English: {english_summary}")
 
